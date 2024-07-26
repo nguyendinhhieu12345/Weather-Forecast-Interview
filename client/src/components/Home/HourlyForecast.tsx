@@ -5,6 +5,7 @@ import WeatherChart from "./WeatherChart";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/Store";
 import useLoading from "@/customHook/useLoading";
+import { AxiosError } from "axios";
 
 export interface IResponseTemperatureChart extends BaseResponseApi {
     data: ITemperatureChart[]
@@ -20,11 +21,19 @@ function HourlyForecast() {
 
     const getForecastWeather = async () => {
         if (currentKeySearch?.keySearch?.trim() !== "") {
-            startLoading()
-            const data = await weatherApi.getTemperatureChart(currentKeySearch?.keySearch as string)
-            if (data?.status === "success") {
-                stopLoading()
-                setTemperatureChart(data)
+            try {
+                startLoading()
+                const data = await weatherApi.getTemperatureChart(currentKeySearch?.keySearch as string)
+                if (data?.status === "success") {
+                    stopLoading()
+                    setTemperatureChart(data)
+                }
+            }
+            catch (e: unknown) {
+                if (e instanceof AxiosError && e.response) {
+                    stopLoading()
+                    console.log(e?.response?.data?.message)
+                }
             }
         }
     }

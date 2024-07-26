@@ -5,6 +5,7 @@ import { getDayOfWeek } from "@/utils/helper";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/Store";
 import useLoading from "@/customHook/useLoading";
+import { AxiosError } from "axios";
 
 interface IResponseCurrentWeather extends BaseResponseApi {
     data: IResponseGetCurrentWeather
@@ -32,11 +33,19 @@ function WeeklyForecast() {
 
     const getForecastWeather = async (days: number) => {
         if (currentKeySearch?.keySearch?.trim() !== "") {
-            startLoading()
-            const data = await weatherApi.getForecastWeather(currentKeySearch?.keySearch as string, days)
-            if (data?.status === "success") {
-                stopLoading()
-                setForecastWeather(data)
+            try {
+                startLoading()
+                const data = await weatherApi.getForecastWeather(currentKeySearch?.keySearch as string, days)
+                if (data?.status === "success") {
+                    stopLoading()
+                    setForecastWeather(data)
+                }
+            }
+            catch (e: unknown) {
+                if (e instanceof AxiosError && e.response) {
+                    stopLoading()
+                    console.log(e?.response?.data?.message)
+                }
             }
         }
     }

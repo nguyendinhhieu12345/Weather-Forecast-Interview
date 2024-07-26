@@ -54,7 +54,6 @@ function SearchBar() {
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         if (!data) return;
         await dispatch(setKeySeach(encodeURIComponent(data.dataInput.trim())))
-        localStorage.setItem("city", encodeURIComponent(data.dataInput.trim()))
         setIsFocus(false);
     };
 

@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "@/redux/Store"
 import { setHistorySearch } from "@/features/historySearch/historySearchSlice"
 import useLoading from "@/customHook/useLoading"
+import { AxiosError } from "axios"
+import { setKeySeach } from "@/features/keySearch/keySearchSlice"
 
 interface IResponseCurrentWeather extends BaseResponseApi {
     data: IResponseGetCurrentWeather
@@ -22,11 +24,27 @@ function CurrentWeather() {
     const getCurrentWeather = async () => {
         if (currentKeySearch?.keySearch?.trim() !== "") {
             startLoading()
-            const data = await weatherApi.getCurrentWeather(currentKeySearch?.keySearch as string)
-            if (data?.status === "success") {
-                setCurrentWeather(data)
-                stopLoading()
-                await dispatch(setHistorySearch(data?.data))
+            try {
+                const data = await weatherApi.getCurrentWeather(currentKeySearch?.keySearch as string)
+                if (data?.status === "success") {
+                    setCurrentWeather(data)
+                    stopLoading()
+                    await dispatch(setHistorySearch(data?.data))
+                }
+            }
+            catch (e: unknown) {
+                if (e instanceof AxiosError && e.response) {
+                    stopLoading()
+                    // await dispatch(resetStoreKeySearch())
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(async (position) => {
+                            await dispatch(setKeySeach(`${position.coords.latitude},${position.coords.longitude}`))
+                        });
+                    } else {
+                        window.alert("Geolocation is not supported by this browser.");
+                    }
+                    window.alert(e?.response?.data?.message)
+                }
             }
         }
     }
