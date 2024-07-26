@@ -7,7 +7,7 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
         const data = payload[0].payload as ITemperatureChart;
         return (
             <div className="bg-white p-2 rounded shadow">
-                <img src={data?.condition?.icon} alt='icon weather' className='w-10 h-10' />
+                <img src={data?.condition?.icon} alt='icon weather' loading='lazy' className='w-10 h-10' />
                 <p>{`Temperature: ${data.temp_c}°C`}</p>
                 <p>{`Wind: ${data.wind_kph} km/h`}</p>
                 <p>{`Humidity: ${data.humidity} %`}</p>
@@ -25,7 +25,7 @@ const WeatherChart = (temperatureChart: IResponseTemperatureChart) => {
     });
 
     return (
-        <div className="w-full p-4 rounded-lg h-[240px]">
+        <div className="w-full lg:p-4 rounded-lg h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={transformedData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                     <XAxis dataKey="time" />

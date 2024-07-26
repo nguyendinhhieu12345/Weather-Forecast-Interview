@@ -5,11 +5,11 @@ import { Trash } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
 
 const WeatherCard: React.FC<IResponseGetCurrentWeather> = (props) => (
-    <div className="bg-gray-200 bg-opacity-70 rounded-lg text-center p-4 w-48">
+    <div className="bg-gray-200 bg-opacity-70 rounded-lg text-center p-4 sm:w-48">
         <h3 className="text-lg font-semibold">{props?.location?.name}</h3>
         <p className="text-sm text-gray-600">{props?.location?.country}</p>
-        <div className="flex items-center mt-2">
-            <img src={props?.current?.condition?.icon} alt="Weather icon" className="w-8 h-8 mr-2" />
+        <div className="flex items-center justify-center mt-2">
+            <img src={props?.current?.condition?.icon} alt="Weather icon" loading='lazy' className="w-8 h-8 mr-2" />
             <span className="text-2xl">{props?.current?.temp_c}°C</span>
         </div>
         <p className="text-sm uppercase">{props?.current?.condition?.text}</p>
@@ -34,7 +34,7 @@ function HistorySearch() {
                 <h2 className="text-xl mr-1 font-bold text-black">History Search</h2>
                 <button onClick={handleClearHistory}><Trash size={22} /></button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                 {historySearch?.historySearch?.length === 0 && <p>None history search</p>}
                 {historySearch?.historySearch?.map((data, index) => (
                     <WeatherCard key={index} {...data} />

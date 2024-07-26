@@ -24,8 +24,8 @@ function Home() {
     const renderPage = () => {
         if (currentPageActive?.pageActive === 1) {
             return (
-                <div className="container mx-auto p-4">
-                    <div className="flex items-start w-full">
+                <div className="container mx-auto p-1 lg:p-4 scroll-auto h-auto">
+                    <div className="flex flex-col lg:flex-row items-start w-full">
                         <TimeGreeting />
                         <SearchBar />
                     </div>
@@ -43,14 +43,14 @@ function Home() {
         }
         else if (currentPageActive?.pageActive === 2) {
             return (
-                <div className="container mx-auto p-4">
+                <div className="container mx-auto p-1 lg:p-4">
                     <HistorySearch />
                 </div>
             )
         }
         else {
             return (
-                <div className="container mx-auto p-4">
+                <div className="container mx-auto p-1 lg:p-4">
                     <WeatherSubscription />
                 </div>
             )
@@ -77,24 +77,23 @@ function Home() {
         }
     }
 
-    const getCurrentPosition = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                await dispatch(setKeySeach(`${position.coords.latitude},${position.coords.longitude}`))
-            });
-        } else {
-            window.alert("Geolocation is not supported by this browser.");
-        }
-    }
-
     useEffect(() => {
+        const getCurrentPosition = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    await dispatch(setKeySeach(`${position.coords.latitude},${position.coords.longitude}`))
+                });
+            } else {
+                window.alert("Geolocation is not supported by this browser.");
+            }
+        }
         confirmSubscription()
         getCurrentPosition()
-    }, [])
+    }, [dispatch])
 
     return (
-        <main className="flex items-center justify-between mx-5 md::mx-10 h-screen">
-            <div className="flex border rounded-lg shadow-lg px-2 md:px-5 py-5 w-full">
+        <main className="flex items-center justify-between mx-2 md:mx-10 lg:h-screen">
+            <div className="flex flex-col sm:flex-row border rounded-lg shadow-lg px-2 md:px-5 py-5 w-full">
                 <Sidebar />
                 {renderPage()}
             </div>

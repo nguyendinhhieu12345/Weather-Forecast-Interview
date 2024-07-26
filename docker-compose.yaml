@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  server:
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: weather-server
+    command: npm run dev
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5000:5000"
+    env_file: ./server/.env
+    environment:
+      - NODE_ENV=development
+    networks:
+      - app-network
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: weather-client
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    env_file: ./client/.env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  data-volume:
+  node_modules:
+  web-root:
+    driver: local

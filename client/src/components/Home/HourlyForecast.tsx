@@ -18,26 +18,26 @@ function HourlyForecast() {
 
     const { isLoading, startLoading, stopLoading } = useLoading()
 
-    useEffect(() => {
-        const getForecastWeather = async () => {
-            if (currentKeySearch?.keySearch?.trim() !== "") {
-                startLoading()
-                const data = await weatherApi.getTemperatureChart(currentKeySearch?.keySearch as string)
-                if (data?.status === "success") {
-                    stopLoading()
-                    setTemperatureChart(data)
-                }
+    const getForecastWeather = async () => {
+        if (currentKeySearch?.keySearch?.trim() !== "") {
+            startLoading()
+            const data = await weatherApi.getTemperatureChart(currentKeySearch?.keySearch as string)
+            if (data?.status === "success") {
+                stopLoading()
+                setTemperatureChart(data)
             }
         }
+    }
+    useEffect(() => {
         getForecastWeather()
-    }, [currentKeySearch?.keySearch])
+    }, [currentKeySearch]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="bg-white p-4 rounded-lg shadow mt-4">
             <h3 className="text-lg font-semibold mb-2">Hourly forecast</h3>
             {
                 isLoading ?
-                    <p className="flex items-center justify-center text-center"><img className="w-5 h-5 animate-spin mr-3" src="https://www.svgrepo.com/show/474682/loading.svg" alt="Loading icon" /></p> :
+                    <p className="flex items-center justify-center text-center"><img loading='lazy' className="w-5 h-5 animate-spin mr-3" src="https://www.svgrepo.com/show/474682/loading.svg" alt="Loading icon" /></p> :
                     <div className="h-60 rounded">
                         <WeatherChart {...temperatureChart as IResponseTemperatureChart} />
                     </div>

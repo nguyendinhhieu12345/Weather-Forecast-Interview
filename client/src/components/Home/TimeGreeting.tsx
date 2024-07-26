@@ -34,7 +34,7 @@ const TimeGreeting: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-start w-1/3">
+        <div className="flex flex-col items-start w-full my-2 lg:my-0 lg:w-1/3">
             <h1 className="text-4xl font-medium text-blue-600">
                 {formatTime(currentTime)}
             </h1>
@@ -42,7 +42,7 @@ const TimeGreeting: React.FC = () => {
                 {formatDate(currentTime)}
             </p>
             <p className="flex items-center mt-2 text-3xl font-semibold text-blue-600">
-                {getGreeting()}!
+                {getGreeting()}
             </p>
         </div>
     );

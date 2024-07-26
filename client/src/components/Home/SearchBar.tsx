@@ -59,7 +59,7 @@ function SearchBar() {
     };
 
     return (
-        <div className="w-2/3 ml-10 relative" ref={refDiv}>
+        <div className="w-full lg:w-2/3 lg:ml-10 relative" ref={refDiv}>
             <p className="font-medium text-base mb-3">Enter a City Name</p>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <label
